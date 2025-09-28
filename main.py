@@ -1,4 +1,4 @@
-# main.py - メインアプリケーション
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 import ttkbootstrap as tb
@@ -10,7 +10,7 @@ import platform
 import os
 from pathlib import Path
 
-# データベースとモジュールのインポート
+
 from database.db_manager import DatabaseManager
 from ui.main_window import MainWindow
 from utils.system_info import SystemInfo
@@ -22,17 +22,17 @@ class GradeCorrectionApp:
         self.root.title("成績訂正申請システム")
         self.root.geometry("1200x800")
         
-        # データベース初期化
+
         self.db_manager = DatabaseManager()
         self.db_manager.initialize_database()
         
-        # システム情報取得
+
         self.system_info = SystemInfo()
         
-        # ユーザー情報
+
         self.current_user = None
         
-        # ログイン処理
+
         if self.show_login():
             self.setup_main_window()
         else:
@@ -64,5 +64,4 @@ class GradeCorrectionApp:
 if __name__ == "__main__":
     app = GradeCorrectionApp()
     app.run()
-    quit
-    
+
