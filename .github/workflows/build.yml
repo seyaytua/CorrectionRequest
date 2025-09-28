@@ -25,26 +25,37 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
-      - name: Build with spec file
+      - name: Build application
         run: |
-          pyinstaller CorrectionRequest.spec
+          pyinstaller --onefile \
+            --windowed \
+            --name CorrectionRequest \
+            --add-data "auth:auth" \
+            --add-data "database:database" \
+            --add-data "ui:ui" \
+            --add-data "utils:utils" \
+            --hidden-import ttkbootstrap \
+            --hidden-import PIL \
+            --hidden-import PIL._tkinter_finder \
+            --hidden-import auth.login \
+            --hidden-import database.db_manager \
+            --hidden-import ui.main_window \
+            --hidden-import utils.system_info \
+            --collect-data ttkbootstrap \
+            main.py
       
       - name: Make executable (macOS)
         if: matrix.os == 'macos-latest'
         run: |
-          chmod +x dist/CorrectionRequest.app/Contents/MacOS/CorrectionRequest
-          xattr -cr dist/CorrectionRequest.app
+          chmod +x dist/CorrectionRequest
+          xattr -cr dist/CorrectionRequest
       
-      - name: Create archive (macOS)
-        if: matrix.os == 'macos-latest'
+      - name: Make executable (Linux)
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          cd dist
-          zip -r CorrectionRequest-mac.zip CorrectionRequest.app
-          cd ..
+          chmod +x dist/CorrectionRequest
       
       - uses: actions/upload-artifact@v4
         with:
           name: CorrectionRequest-${{ matrix.os }}
-          path: |
-            dist/CorrectionRequest*
-            dist/*.zip
+          path: dist/*
